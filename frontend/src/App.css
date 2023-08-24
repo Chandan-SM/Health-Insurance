@@ -8,10 +8,11 @@ a{
 .start{
   display: flex;
   flex-direction: row;
+  align-items: center;
+  height: 50vh;
 }
 .web-name{
-  width: 98vw;
-  height: 50vh;
+  height:fit-content ;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -168,6 +169,7 @@ a{
 }
 .comp3-2-2-h3{
   background-color: transparent;
+  text-align: center;
   color: white;
   font-style: normal;
   font-family: "Albert Sans", "Albert Sans Placeholder", sans-serif;
@@ -203,6 +205,7 @@ a{
   display: flex;
   gap: 1vw;
   align-items: center;
+  text-align: center;
 }
 .comp-b1{
   padding: 3%;
@@ -242,4 +245,123 @@ a{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 850px) {
+  .start{
+    min-height: 40vh;
+  }
+  .web-name{
+    font-size: 4rem;
+    width: 20%;
+    z-index: 1;
+  }
+  .hero-img{
+    width: 40%;
+    z-index: 0;
+  }
+  .navbar{
+    width: 100vw;
+    z-index: 1;
+  }
+  .comp-1{
+    flex-direction: column-reverse;
+    width: 90vw;
+  }
+  .comp1-left{
+    width: 90vw;
+  }
+  .comp1-right{
+    width: 90vw;
+  }
+  .comp-heading{
+    font-size: xx-large;
+  }
+  .comp-p{
+    font-size: x-large;
+  }
+  .comp-2{
+    flex-direction: column;
+    width: 90vw;
+  }
+  .comp2-left{
+    width: 90vw;
+  }
+  .comp2-right{
+    width: 90vw;
+  }
+  .comp-3{
+    width: 90vw;
+    height: 50vh;
+  }
+  .comp3-1-1-h1{
+    font-size: xx-large;
+  }
+  .comp3-1-1-h3{
+    font-size: large;
+  }
+  .comp3-2-2-h1{
+    font-size: xx-large;
+  }
+  .comp3-2-2-h3{
+    font-size: large;
+  }
+  .comp-4{
+    width: 90vw;
+  }
+  .comp4-h1{
+    font-size: x-large;
+  }
+  .comp4-buttons{
+    width: 60%;
+  }
+  .comp5{
+    width: 90vw;
+  }
+}
+
+@media screen and (min-width: 850px) and (max-width: 1150px) {
+  .start{
+    min-height: 40vh;
+    height: fit-content;
+  }
+  .web-name{
+    font-size: 8rem;
+    width: 20%;
+    z-index: 1;
+  }
+  .hero-img{
+    width: 40%;
+    z-index: 0;
+  }
+  .navbar{
+    margin-top: 0%;
+  }
+  .comp-1{
+    width: 90vw;
+  }
+  .comp1-left{
+    width: 45vw;
+  }
+  .comp1-right{
+    width: 45vw;
+  }
+  .img{
+    width: 90%;
+  }
+  .comp-2{
+    width: 90vw;
+  }
+  .comp2-left{
+    width: 45vw;
+  }
+  .comp2-right{
+    width: 45vw;
+  }
+  .comp-3{
+    width: 90vw;
+  }
+  .comp-4{
+    width: 90vw;
+  }
 }

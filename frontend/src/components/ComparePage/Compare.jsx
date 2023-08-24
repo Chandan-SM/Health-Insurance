@@ -1,8 +1,11 @@
 import React from 'react'
+import InsuranceCalculator from './InsuranceCalculator'
 
 function Compare() {
   return (
-    <div>Compare</div>
+    <div>
+      <InsuranceCalculator />
+    </div>
   )
 }
 

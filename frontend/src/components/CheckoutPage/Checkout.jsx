@@ -42,9 +42,6 @@ function Checkout() {
                 {data.AddtoCart ? '✅' : <FaCartPlus className='add-to-cart-img' />}
               </div>
             </div>
-            <div className='premium-details'>
-              <h3 className='premium-amount'>Rs {data.sumInsured}</h3>
-            </div>
           </div>
           </>
         )})}

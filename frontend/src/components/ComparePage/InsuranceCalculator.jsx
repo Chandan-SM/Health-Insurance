@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaCartPlus } from 'react-icons/fa'
 
 function InsuranceCalculator() {
@@ -36,9 +36,8 @@ function InsuranceCalculator() {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.ok) {
-        const updatedData = await response.json();
         // Update the 'premium' state with the updated data
         setPremium((prevPremium) => {
           const updatedPremium = prevPremium.map((data) => {

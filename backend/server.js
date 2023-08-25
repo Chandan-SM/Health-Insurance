@@ -3,87 +3,109 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-const bodyParser = require('body-parser');
-// const cron = require('node-cron');
-// const axios = require('axios');
+const RateData = require("./modal");
 
 // Create an Express app
-const app = express(
-  {cors:{origin:"*",
-  methods: ["GET", "POST", "DELETE"],
-  allowedHeaders: ["Content-Type"],
-  credentials: true}}
-);
-
+const app = express({
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
+  },
+});
 app.use(cors());
 app.use(express.json());
-
-app.use(bodyParser.json());
-
-const userSchema = new mongoose.Schema({
-  ages: Number,
-  sumInsured: Number,
-  cityTier: String,
-  tenure: String,
-  premium: Number
-});
-mongoose.connect(`${process.env.MONGO_URI}`,{ useNewUrlParser :true})
-// Assuming your rates are stored in a rates.js file
-const rates = require('./rates');
-
-app.post('/calculate-premium', (req, res) => {
-  const { ages, sumInsured, cityTier, tenure } = req.body;
-  
-  // Implement your logic to calculate the premium based on the provided data
-  const premium = calculatePremium(ages, sumInsured, cityTier, tenure);
-  
-  res.json({ premium });
-});
-
-// Example calculation function (you need to adapt this to your logic)
-function calculatePremium(ages, sumInsured, cityTier, tenure) {
-  // Use the rates data and input parameters to calculate premium
-  // You can access the rates like rates[ageRange][cityTier][sumInsured][tenure]
-  // Implement your premium calculation logic here
-  
-  return calculatedPremium;
-}
-
-
-const User = mongoose.model('User', userSchema);
-
-app.post('/calculate-premium', async (req, res) => {
-  const { ages, sumInsured, cityTier, tenure } = req.body;
-  
-  // Calculate the premium
-  const premium = calculatePremium(ages, sumInsured, cityTier, tenure);
-
-  // Store the user and premium data in the database
-  const user = new User({
-    ages,
-    sumInsured,
-    cityTier,
-    tenure,
-    premium
-  });
-  
-  try {
-    await user.save();
-    res.json({ premium });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to save user data' });
-  }
-});
-
 
 mongoose.set("strictQuery", false);
 
 // Set up a database connection using Mongoose
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Mongo-db connected!");
-  })
+mongoose.connect(process.env.MONGO_URI).then(() => {
+  console.log("Mongo-db connected!");
+});
+
+// Set up a route to handle rate data submission
+app.post("/rateData", async (req, res) => {
+  try {
+    // Extract rate data from the request body
+    const { member_csv, age_range, tier } = req.body;
+
+    // Create a new rate data document
+    const rateData = new RateData({
+      member_csv,
+      age_range,
+      tier,
+    });
+
+    // Save the rate data to the database
+    await rateData.save();
+
+    // Send a success response
+    res.status(200).send("Rate data saved successfully");
+  } catch (err) {
+    // Send an error response if something went wrong
+    res.status(500).send("Error saving rate data: " + err.message);
+  }
+});
+
+app.get("/rateData", async (req, res) => {
+  const rateData = await RateData.find();
+  res.status(200).send(rateData);
+});
+
+app.patch('/addtocart/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const existingData = await RateData.findById(id);
+
+    if (!existingData) {
+      return res.status(404).json({ message: 'Data not found' });
+    }
+
+    const updatedAddedStatus = !existingData.AddtoCart;
+    existingData.AddtoCart = updatedAddedStatus;
+    const updatedData = await existingData.save();
+
+    res.status(200).json({ message: 'Added status updated', data: updatedData });
+  } catch (error) {
+    res.status(500).json({ message: 'An error occurred while updating added status' });
+  }
+});
+
+
+app.post("/getPremium", async (req, res) => {
+  const { memberType, tier, price } = req.body;
+
+  try {
+    const premiumData = await RateData.find({
+      member_csv: memberType,
+      tier: tier,
+    });
+
+    if (premiumData.length > 0) {
+      const filteredData = premiumData.map((data) => ({
+        ageRange: data.age_range,
+        memberCsv: data.member_csv,
+        tier: data.tier,
+        sumInsured: data[price] || "Sum Insured not found",
+        _id:data._id,
+        addedTocart:data.AddtoCart
+      }));
+
+      res.status(200).json(filteredData);
+    } else {
+      res
+        .status(404)
+        .json({
+          message: "Data not found for the specified member type and tier",
+        });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching premium data" });
+  }
+});
 
 // Start the server
 app.listen(process.env.PORT, () => {

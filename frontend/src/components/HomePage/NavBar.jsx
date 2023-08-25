@@ -6,7 +6,7 @@ function NavBar() {
     <div className='navbar'>
         <Link className='nav-c' to={"/"}>Home</Link>
         <Link className='nav-c' to={"/compare"}>Compare</Link>
-        <Link className='nav-c'>CheckOut</Link>
+        <Link className='nav-c' to={"/checkout"}>CheckOut</Link>
     </div>
   )
 }

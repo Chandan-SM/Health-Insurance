@@ -9,11 +9,9 @@ function InsuranceCalculator() {
   const [premium, setPremium] = useState([]);
 
 
-  useEffect(()=>{
-    console.log(premium);
-  },[premium])
+  
   const calculatePremium = async () => {
-    const response = await fetch('http://localhost:4000/getPremium', {
+    const response = await fetch('https://insureme.onrender.com/getPremium', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -32,13 +30,13 @@ function InsuranceCalculator() {
 
   const toggleAddedStatus = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/addtocart/${id}`, {
+      const response = await fetch(`https://insureme.onrender.com/addtocart/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response);
+      
       if (response.ok) {
         const updatedData = await response.json();
         // Update the 'premium' state with the updated data

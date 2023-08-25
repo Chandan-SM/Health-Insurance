@@ -8,12 +8,9 @@ function Checkout() {
     fetchData();
   }, []);
 
-  useEffect(()=>{
-    console.log(premium)
-  },[premium])
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:4000/rateData'); // Replace with your API endpoint
+      const response = await fetch('https://insureme.onrender.com/rateData'); // Replace with your API endpoint
       const data = await response.json();
       setPremium(data);
     } catch (error) {
